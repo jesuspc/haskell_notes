@@ -172,7 +172,7 @@ __Kleisli Category__: A category based on a Monad
   process = upCase >=> toWords
   ```
 
-## 5. Products and Coproducts
+## 5. Products and Coproducts + 6. Simple Algebraic Data Types
 
 __Isomorphism__: A pair of morphisms one inverse to the other (invertible morphism)
   * __Isomorphic objects__: Mapping from object a to object b and
@@ -235,6 +235,18 @@ __Products__
   p’ = p . m
   q’ = q . m
   ```
+  * Leads to __product types__:
+    * Haskell's __pairs__ are the cannonical implementation
+    ```haskell
+    data Pair a b = Pair a b
+    --which is equivalent to
+    data (,) a b = (,) a b
+    --more commas for more dimensions
+    ```
+    * Non commutative
+    * Commutative up to isomorphism
+    * The Unit type is the unit of the product
+    * => The Set category is a monoidal category with respect to product
 
 __Coproduct__:
   ```lex
@@ -253,7 +265,23 @@ __Coproduct__:
   j' = m . j
   ```
   * Dual of the product (obtained by reversing the arrows in the product pattern)
+  * Leads to __sum types__:
+    * Haskell's __eithers__ are the cannonical implementation
+    ```haskell
+    data Either a b = Left a | Right b
+    ```
+    * Non commutative
+    * Commutative up to isomorphism
+    * The Void type is the unit of the coproduct
+    * => The Set category is a monoidal category with respect to coproduct
 
+* => (a, Void) is equal up to isomorphism to Void
+  * => Analogous to a * 0 = a
+* => (a, Either b c) is equal up to isomorphism to Either (a, b) (a c)
+  * => Analogous to a * (b + c) = ab + bc
+
+* => Those two interwinded monoids form a __Ring__
+  * => Therefore they have the properties of an algebraic Ring
 
 
 
