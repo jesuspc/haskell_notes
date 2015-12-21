@@ -10,7 +10,7 @@ __Category__: Objects and arrows that go between them
     A -> B, B -> C => A -> C
     ```
 
-__Morph    -- Haskell --ism__: The arrows
+__Morphism__: The arrows
   * Functions as morphisms
     ```tex
     f(a) -> b, g(b) -> c => g(f(a)) -> c (~> g∘f)
@@ -54,13 +54,11 @@ __Types__: Sets of values
         ```haskell
         f44 :: () -> Integer
         f44 () = 44 -- The unit value is ()
-        --
         ```
       * Funcs from unit to any type are biunivocal with the elements of that set.
       * __Parametrically polymorphic function__
         * Can be implemented with the same formula for any type
           ```haskell
-
           -- A whole family of those functions can be implemented as:
           unit :: a -> ()
           unit _ = ()
@@ -106,16 +104,16 @@ __Hom-set__ (C(a,b))
 
 __Orders__
   * A morphism is the relation of being less than or equal => __Preorder__
-      => Every hom-set is empty or singleton
-        => C(a,a) contains only the identity
+      - => Every hom-set is empty or singleton
+        - => C(a,a) contains only the identity
   * If also [a <= b and b <= a => a = b] => __Partial order__
-      => Can not have cycles
-      => Any directed acyclic graph generates it as its free category
+      - => Can not have cycles
+      - => Any directed acyclic graph generates it as its free category
   * If also all objects are in a relation with each other => __Total order__
     or __Linear order__
     * Required for most of the sorting algorithms
 
-__Mono    -- Haskell --ids__
+__Monoids__
   * A set with a binary operation that is:
     * Associative
     * Has a neutral element with respect to the operation
@@ -127,12 +125,12 @@ __Mono    -- Haskell --ids__
     ```
   * Can be described as a single category object with a set of morphisms:
     * __Categorical monoid__: One-object category (M)
-      => M(m, m) + binary operator __monoidal product__:
+      - => M(m, m) + binary operator __monoidal product__:
         * g·f should exist because source and target are the same
         * Is associative by rules of category
         * Identity morphism is the neutral element
-        => A set monoid can always be recovered from a category monoid
-          => They are the same
+          - => A set monoid can always be recovered from a category monoid
+            - => They are the same
 
 ## 4. Kleisli Categories
 
@@ -215,6 +213,50 @@ __Opposite category__ (Cop of C): C with the arrows reversed
     => Is category
 
 __Products__
+  ```lex
+  Given two objects a, b we define its product c as:
+
+  The object with two projections for which any other object c' with two
+  projections there is a unique morphism m from c' to c that factorizes those
+  projections
+  ```
+  * __Projection__ of a __Cartesian product__:
+  ```haskell
+  fst :: (a, b) -> a
+  fst (x, y) = x
+  snd :: (a, b) -> b
+  snd (x, y) = y
+  ```
+  * __Factorize__:
+  ```haskell
+  -- p, q projections of c; p', q' projections of c'; m factorizer
+  p :: c -> a
+  q :: c -> b
+  p’ = p . m
+  q’ = q . m
+  ```
+
+__Coproduct__:
+  ```lex
+  Given two objects a, b we define its coproduct c as:
+
+  The object with two injections such that for any other object c' with two
+  injections there is a unique morphism m from c to c' that factorizes those
+  injections
+  ```
+  * __Injection__:
+  ```haskell
+  -- i, j injections of c; i', j' injections of c'; m factorizer
+  i :: a -> c
+  j :: b -> c
+  i' = m . i
+  j' = m . j
+  ```
+  * Dual of the product (obtained by reversing the arrows in the product pattern)
+
+
+
+
 
 
 
