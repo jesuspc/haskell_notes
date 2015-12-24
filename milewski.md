@@ -283,9 +283,78 @@ __Coproduct__:
 * => Those two interwinded monoids form a __Ring__
   * => Therefore they have the properties of an algebraic Ring
 
+# 7. Functors
 
+__Functor__: Mapping between categories preserving the structure of category
+  * Given C, D categories, F functor
+    * F maps objects in C to objects in D
+    * F maps morphisms
+      * Preserving connections
+      * Preserving composition
+      * Mapping correspondant ids
+    ```haskell
+    -- Given categories C, D
+    -- Given a, b in C
+    -- Given F functor
+    -- Given f from a to b morphism in C:
+    f :: a -> b
 
-
+    -- The image of a in D is:
+    F a
+    -- Then the image of f in D:
+    F f :: F a -> F b
+    -- and if h = g . f in C
+    F h = F g . F f
+    -- and if ida is id in a, idFa id in Fa
+    F ida = idFa
+    ```
+  * Abstracting the functor in Haskell
+    * __Typeclasses__: Define a family of types that support a common interface
+      * Work both on types and type constructors
+      * For a functor:
+      ```haskell
+      class Functor f where
+        fmap :: (a -> b) -> f a -> f b
+        -- If f (type constructor, inferred by compiler by identifying it
+        -- applying on types) is a functor it implements fmap with the
+        -- given signature
+      -- With that we can declare Maybe as
+      instance Functor Maybe where
+        fmap _ Nothing = Nothing
+        fmap f (Just x) = Just (f x)
+      ```
+  * Examples
+    * __Maybe__
+    ```haskell
+    data Maybe a = Nothing | Just a -- is a mapping from type a to type Maybe a
+    -- Maybe is a type constructor, a function on type
+    -- To be a functor Maybe should be a mapping also on morphisms of a:
+    -- For any f :: a -> b we need to produce f' :: Maybe a -> Maybe b
+    -- We therefore define the image of f under Maybe as:
+    f' :: Maybe a -> Maybe b
+    f' Nothing = Nothing
+    f' (Just x) = Just (f x)
+    -- We implement the morphism-mapping part of a functor as fmap. For Maybe:
+    fmap :: (a -> b) -> (Maybe a -> Maybe b) -- 'lifts' a function
+    -- Because of currying the type signature can be interpreted as:
+    fmap :: (a -> b) -> Maybe a -> Maybe b
+    fmap _ Nothing = Nothing
+    fmap f (Just x) = Just (f x)
+    -- We can prove that here defined Maybe is a Functor and fullfills the properties
+    ```
+    * __Reader__
+    ```haskell
+    -- Type constructor is:
+    ((-> r)) -- All functions from r, it maps any type a to (r -> a)
+    -- With fmap:
+    -- fmap :: (a -> b) -> ((r -> a) -> (r -> b))
+    -- which eqs to fmap :: (a -> b) -> (r -> a) -> (r -> b)
+    instance Functor ((->) r) where
+      -- To get h::r->b given f::a->b, g::r->a we can simply compose
+      fmap f g = f . g
+      -- Which is the same as
+      fmap = (.)
+    ```
 
 
 
