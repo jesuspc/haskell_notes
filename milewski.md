@@ -355,7 +355,43 @@ __Functor__: Mapping between categories preserving the structure of category
       -- Which is the same as
       fmap = (.)
     ```
+  * Functors between categories compose (like functions between sets)
+    * And they have the same properties as morphisms in the __Cat__ category:
+      * Category in which objects are categories (without including itself)
+        and morphisms are functors
+    * Example:
+    ```haskell
+    square x = x * x
 
+    mis :: Maybe [Int] -- Composition of two functors Maybe and [] acting on a
+    mis = Just [1, 2, 3]
 
+    mis2 = fmap (fmap square) mis -- Outer fmap uses the implementation for
+    -- Maybe and inner for List
+    ```
 
+# 8. Functoriality
 
+* __Bifunctors__
+  * Functors of two arguments
+    * In objects maps every pair of objects from category C and category D to
+      objects in category E
+      * Maps from a cartesian product of categories CxD to E
+    * In morphisms it maps a pair of morphisms which is the same as a single
+      one from the category CxD. It goes from a pair of obj to a pair of obj.
+      * Composition follows:
+      ```lex
+      (f, g) . (f', g') = (f . f', g . g')
+      ```
+    * => functors in both arguments
+  ```haskell
+  -- In this class all three categories are the category of Haskell types
+  class Bifunctor f where
+    bimap :: (a -> c) -> (b -> d) -> f a b -> f c d
+    -- Maps a pair of funcs to the lifted func (f a b -> f c d)
+    bimap g h = first g . second h
+    first :: (a -> c) -> f a b -> f c b
+    first g = bimap g id
+    second :: (b -> d) -> f a b -> f a d
+    second = bimap id
+  ```
